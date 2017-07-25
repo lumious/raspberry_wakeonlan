@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>远程唤醒</title>
+		<link rel="stylesheet" href="static/css/bootstrap.min.css" />
+		<style type="text/css">
+			body{
+				padding-top: 50px;
+  				padding-bottom: 20px;
+			}
+
+		</style>
+	</head>
+	<body>
+
+	    <nav class="navbar navbar-inverse navbar-fixed-top">
+	      <div class="container">
+	        <div class="navbar-header">
+	          <span class="navbar-brand">远程唤醒</span>
+	        </div>
+	      </div>
+	    </nav>
+
+	    <div class="container" style="padding-top: 20px;">
+	      <div class="row">
+	      	<div class="col-md-12" id="prompt">
+	      		<!--<div class="alert alert-danger">
+				  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+				  唤醒失败：
+				</div>-->
+	      	</div>
+	      </div>
+	      <div class="row">
+	        <div class="col-xs-12 col-md-6 col-lg-6">
+				<form id="form">
+				  <div class="form-group">
+				    <label for="mac_addr">MAC地址</label>
+				    <input type="text" class="form-control" id="mac_addr" name="mac_addr" placeholder="请输入要唤醒的MAC地址">
+				  </div>
+				  <button type="button" class="btn btn-default" id="submit_btn">提交</button>
+				</form>
+	        </div>
+
+	      </div>
+
+	      <hr>
+
+	      <footer>
+	        <p>&copy; 2016 Company, Inc.</p>
+	      </footer>
+	    </div> <!-- /container -->
+
+		<script src="static/js/jquery-2.1.3.js"></script>
+		<script src="static/js/bootstrap.min.js"></script>
+		<script>
+			$('#submit_btn').on('click',function(){
+				$.ajax({
+					type:"post",
+					url:"wake",
+					async:true,
+					data:$('#form').serialize(),
+					success:function(data){
+						if(data.code == 1){
+						    $('#prompt').html('<div class="alert alert-success"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>请求成功</div>');
+                        }
+                        else if(data.code == 0){
+                            $('#prompt').html('<div class="alert alert-danger"><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>请求失败：' + data.message + '</div>');
+                        }
+					},
+					error:function(){
+						alert('error');
+					},
+					contentType:'application/x-www-form-urlencoded'
+				});
+			});
+		</script>
+
+	</body>
+</html>
